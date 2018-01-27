@@ -21,6 +21,7 @@ connection.connect(function(err){
 	doWhat();
 }); 
 function doWhat(){
+	console.log("press ctrl + c to exit!!!")
 	inquirer
 	  		.prompt([
 		  	{
@@ -65,10 +66,60 @@ function viewLow(){
 	});
 };
 function addI(){
+	  	inquirer
+	  	.prompt([
+		  	{
+		      name: "id",
+		      type: "input",
+		      message: "Which item number do you wanna update?",
+		    	validate: function(val){
+					if(isNumber(val)){
+						return true;
+					}else{
+						return false;
+					}
+				}		      	      
+		    },
+		    {
+		    	name: "amount",
+		    	type: "input",
+		    	message:"How much was added?",
+		    	validate: function(val){
+					if(isNumber(val)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+		    }
+		]).then(function(answer){
 
-}
+			 query = "select * from products2 where ?"
+			connection.query(query, { id:answer.id }, function(err, res)
+			{
+				if (err) throw err;
+				return res;
+			});
+			var stock = res[0].stock += answer.amount
+			var query = connection.query(
+		    "UPDATE products2 SET ? WHERE ?",
+		    [
+		      {
+		        stock: stock  
+		      },
+		      {
+		        id: answer.id
+		      }
+		    ],
+		    function(error, responce) {
+		      console.log("products updated!\n");
+		      // Call deleteProduct AFTER the UPDATE completes
+		    });
+		});     
+}	
+
+
 function addP(){
-	  console.log("What product do you wanna add...\n");
 	  	inquirer
 	  		.prompt([
 		  	{

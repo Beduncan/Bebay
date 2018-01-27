@@ -26,58 +26,49 @@ function readItems() {
 	askQ();
 };
 function askQ(){	
-	inquirer
-  		.prompt([
-	  	{
-	      type: "input",
-	      message: "What is the ID Number of the product you want?",
-	      name: "id"
-	    },
-	    {
-	      type: "input",
-	      message: "how many units of this item would you like?",
-	      name: "amount"
-	    },
-		]).then(function(answer){
-      		connection.query("select * from products2 where ?", { id:answer.id },  function(error, res) {
-      			if(answer.amount > res[0].stock){
-      				console.log('Insufficient quantity!');
-      			}else{
-      				update();
-      			}
-      				function update(){
+	 setTimeout(function () {
+		inquirer
+	  		.prompt([
+		  	{
+		      type: "input",
+		      message: "What is the ID Number of the product you want?",
+		      name: "id"
+		    },
+		    {
+		      type: "input",
+		      message: "how many units of this item would you like?",
+		      name: "amount"
+		    },
+			]).then(function(answer){
+	      		connection.query("select * from products2 where ?", { id:answer.id },  function(err, res) {
+	      			if(answer.amount > res[0].stock){
+	      				console.log('Insufficient quantity!');
+	      			}else{
 						console.log("One second... proessing order");
-							var query = "select * from products2 where ?"
-							connection.query(query, { id:answer.id }, function(err, res)
+						var query = connection.query(
+						"UPDATE products2 SET ? WHERE ?",
+						[
 							{
-								if (err) throw err;
-								return res[0].stock;
-							});
-
-	  					var query = connection.query(
-					    "UPDATE products2 SET ? WHERE ?",
-					    [
-					      {
-					        stock: res[0].stock - answer.amount
-					      },
-					      {
-					         id: answer.id
-					      }
-					    ],
-					     function(err, res) {
-					     	findPrice();
-				    	});
-					}
-					function findPrice(){
-						var query = "select id, price from products2"
-						connection.query(query, function(err, res)	{
-							if (err) throw err;
-							console.log
-							var total = res[0].price * answer.amount;
-							console.log("your total is... " + total);
+							 stock: - answer.amount
+							},
+							{
+							 id: answer.id
+							}
+						],
+						function(err, res) {
+							//findPrice();
 						});
-						connection.end();
 					}
-			});
-		});
-};
+				});
+      		});		
+		}, 500);	 
+};   				
+// function findPrice(){
+// 	var query = "select price from products2"
+// 	connection.query(query, function(err, res)	{
+// 		console.log(res);
+// 		if (err) throw err;
+// 		console.log("your total is... " + (res[0].price * answer.amount));
+// 	});
+// 	connection.end();
+// }
