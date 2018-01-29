@@ -47,6 +47,7 @@ function doWhat(){
 				}
 			});
 };
+//shows table 
 function viewAll(){
 	var query = "select id, product, price, stock from products2"
 	connection.query(query, function(err, res)
@@ -57,6 +58,7 @@ function viewAll(){
 		doWhat();
 	});
 };
+//shows all iteams with a stock lower then 5
 function viewLow(){
 	var query = "SELECT product, stock FROM products2 WHERE stock BETWEEN ? AND ?";
 	connection.query(query, [0, 5], function(err, res){
@@ -65,6 +67,7 @@ function viewLow(){
 		doWhat();
 	});
 };
+// 
 function addI(){
 	  	inquirer
 	  	.prompt([
@@ -94,31 +97,30 @@ function addI(){
 		    }
 		]).then(function(answer){
 
-			 query = "select * from products2 where ?"
+			 query = "select stock from products2 where ?"
 			connection.query(query, { id:answer.id }, function(err, res)
 			{
 				if (err) throw err;
-				return res;
+				
+				var stocks = res[0].stock;
+				var query = connection.query(
+			    "UPDATE products2 SET ? WHERE ?",
+			    [
+			      {
+
+			        stock: stocks + answer.amount  
+			      },
+			      {
+			        id: answer.id
+			      }
+			    ],
+			    function(error, responce) {
+			      console.log("products updated!\n");
+			      doWhat();
+			    });
 			});
-			var stock = res[0].stock += answer.amount
-			var query = connection.query(
-		    "UPDATE products2 SET ? WHERE ?",
-		    [
-		      {
-		        stock: stock  
-		      },
-		      {
-		        id: answer.id
-		      }
-		    ],
-		    function(error, responce) {
-		      console.log("products updated!\n");
-		      // Call deleteProduct AFTER the UPDATE completes
-		    });
 		});     
 }	
-
-
 function addP(){
 	  	inquirer
 	  		.prompt([

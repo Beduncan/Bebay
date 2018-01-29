@@ -15,6 +15,7 @@ connection.connect(function(err){
 	console.log("connected as id " + connection.threadId);
 	readItems();
 }); 
+//shows items to customer
 function readItems() {
 	var query = "select id, product, price from products2"
 	connection.query(query, function(err, res)
@@ -25,8 +26,10 @@ function readItems() {
 	});
 	askQ();
 };
+// starts prompt takes answers and proesses how much is bought by the customer removes that from table 
 function askQ(){	
-	 setTimeout(function () {
+	setTimeout(function () {
+		console.log("press ctrl C to exit")
 		inquirer
 	  		.prompt([
 		  	{
@@ -43,32 +46,48 @@ function askQ(){
 	      		connection.query("select * from products2 where ?", { id:answer.id },  function(err, res) {
 	      			if(answer.amount > res[0].stock){
 	      				console.log('Insufficient quantity!');
+	      				connection.end();
 	      			}else{
+	      				var stock = res[0].stock;
 						console.log("One second... proessing order");
 						var query = connection.query(
 						"UPDATE products2 SET ? WHERE ?",
 						[
 							{
-							 stock: - answer.amount
+							 stock: stock - answer.amount
 							},
 							{
 							 id: answer.id
 							}
 						],
 						function(err, res) {
-							//findPrice();
+							var query = "select price from products2 where ?"
+								connection.query(query,{id:answer.id}, function(err, res)	{
+								if (err) throw err;
+								total = res[0].price * answer.amount;
+								console.log("your total is... " + total);
+							});
+							 var query = "select product_sales from products2 where ?"
+							 	connection.query(query, {id:answer.id}, function(err, res){
+							 		sales = res[0].product_sales
+									 	connection.query("UPDATE products2 set ? where ?", 
+										[ 	
+										 	{
+										 		product_sales: sales + total
+										 	},
+										 	{
+										 		id: answer.id
+										 	}
+										]),
+										function(err, res){
+											if (err) throw err;
+											askQ();
+										};
+							 });
 						});
 					}
 				});
       		});		
-		}, 500);	 
+	}, 500);	 
 };   				
-// function findPrice(){
-// 	var query = "select price from products2"
-// 	connection.query(query, function(err, res)	{
-// 		console.log(res);
-// 		if (err) throw err;
-// 		console.log("your total is... " + (res[0].price * answer.amount));
-// 	});
-// 	connection.end();
-// }
+
