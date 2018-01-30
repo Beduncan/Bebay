@@ -32,19 +32,32 @@ function doWhat(){
 		        "View Products for Sale",
 		        "View Low Inventory",
 		        "Add to Inventory",
-		        "Add New Product"
+		        "Add New Product",
+		        "Exit"
 		      ]
 		    },
 			]).then(function(answer){
-				if (answer.whatDo === "View Products for Sale") {
-					viewAll();
-				} else if (answer.whatDo === "View Low Inventory") {
-					viewLow();
-				} else if (answer.whatDo === "Add to Inventory") {
-					addI();
-				}else {
-					addP();
-				}
+				switch (answer.whatDo) {
+					case "View Products for Sale":
+				    viewAll();
+				    break;
+					
+					case "View Low Inventory":
+				    viewLow();
+				    break;
+					
+					case "Add to Inventory":
+				    addI();
+				    break;
+
+					case "Add New Product":
+				    addp();
+				    break;
+
+				    case "Exit":
+			    	Exit();
+			    	break;
+			    };
 			});
 };
 //shows table 
@@ -67,8 +80,9 @@ function viewLow(){
 		doWhat();
 	});
 };
-// 
+// add to inventory
 function addI(){
+	//promting user
 	  	inquirer
 	  	.prompt([
 		  	{
@@ -96,7 +110,7 @@ function addI(){
 				}
 		    }
 		]).then(function(answer){
-
+			// getting stocks from product wanted 
 			 query = "select stock from products2 where ?"
 			connection.query(query, { id:answer.id }, function(err, res)
 			{
@@ -121,6 +135,7 @@ function addI(){
 			});
 		});     
 }	
+//adds a new product to table 
 function addP(){
 	  	inquirer
 	  		.prompt([
@@ -187,3 +202,6 @@ function addP(){
 		    });
 		});
 };
+function Exit(){
+	connection.end();
+} 			

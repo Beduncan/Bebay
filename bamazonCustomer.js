@@ -81,13 +81,40 @@ function askQ(){
 										]),
 										function(err, res){
 											if (err) throw err;
-											askQ();
 										};
+										ending();
 							 });
 						});
 					}
 				});
       		});		
 	}, 500);	 
-};   				
+};
+function ending(){
+	inquirer
+		.prompt([		    
+		  	{
+		      name: "whatDo",
+		      type: "list",
+		      message: "Now What Wanna do you Want to do?",
+		      choices: [
+		        "Buy More",
+		        "Exit"
+		      ]
+		    },
+			]).then(function(answer){
+			    switch (answer.whatDo) {
+					case "Buy More":
+				    askQ();
+				    break;
+
+				    case "Exit":
+			    	Exit();
+			    	break;
+			    };
+			});    	
+}  
+function Exit(){
+	connection.end();
+} 				
 

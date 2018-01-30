@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Beduncan/bamazon/issues"
   },
-  "homepage": "https://github.com/Beduncan/bamazon#readme"
+  "homepage": "https://github.com/Beduncan/bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.10.0"
+  },
+  "devDependencies": {}
 }
