@@ -21,7 +21,6 @@ connection.connect(function(err){
 	doWhat();
 }); 
 function doWhat(){
-	console.log("press ctrl + c to exit!!!")
 	inquirer
 	  		.prompt([
 		  	{
@@ -51,7 +50,7 @@ function doWhat(){
 				    break;
 
 					case "Add New Product":
-				    addp();
+				    addP();
 				    break;
 
 				    case "Exit":
@@ -115,14 +114,15 @@ function addI(){
 			connection.query(query, { id:answer.id }, function(err, res)
 			{
 				if (err) throw err;
-				
-				var stocks = res[0].stock;
+				for (var i = 0; i < res.length; i++) {
+					var stocks = parseFloat(res[0].stock) + parseFloat(answer.amount)
+				}
 				var query = connection.query(
 			    "UPDATE products2 SET ? WHERE ?",
 			    [
 			      {
 
-			        stock: stocks + answer.amount  
+			        stock: stocks 
 			      },
 			      {
 			        id: answer.id
