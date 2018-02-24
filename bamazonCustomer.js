@@ -29,7 +29,6 @@ function readItems() {
 // starts prompt takes answers and proesses how much is bought by the customer removes that from table 
 function askQ(){	
 	setTimeout(function () {
-		console.log("press ctrl C to exit")
 		inquirer
 	  		.prompt([
 		  	{
