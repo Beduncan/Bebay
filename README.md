@@ -1,4 +1,4 @@
-# bamazon
+# Bebay
 
 This is a practice store front that is ran in the terminal. It allows the buyer, manger and, supervisor to make changes and view the products available as well as the price, department, quantity, amount sales, and overhead cost. The manger and supervisor to edit the information to what is needed. The customer can pick an item to buy and how many they want; the app will give them there total.    
 
