@@ -29,4 +29,4 @@ Add additional notes about how to deploy this on a live system
 
 * **Bryant Duncan** - *solo delvoper* - [linkdin](https://www.linkedin.com/in/bryant-duncan/)
 
-## License
+## See Screenshots in img folder!!!!
