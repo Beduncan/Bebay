@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/Beduncan/bamazon#readme",
   "dependencies": {
-    "console.table": "^0.10.0"
+    "cli-table": "^0.3.1",
+    "console.table": "^0.10.0",
+    "dotenv": "^5.0.1",
+    "inquirer": "^5.2.0",
+    "is-number": "^6.0.0",
+    "is-string": "^1.0.4",
+    "mysql": "^2.15.0"
   },
   "devDependencies": {}
 }

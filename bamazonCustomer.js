@@ -4,11 +4,10 @@ const connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
 
-	user:'root',
+	user:process.env.DB_USERNAME,
 
-	password: '1988Vwgti',
-	database: "bamazon"
-});
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_DATABASE
 
 connection.connect(function(err){
 	if (err) throw err; 
