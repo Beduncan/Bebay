@@ -1,6 +1,6 @@
 # Bebay
-
-This is a practice store front that is ran in the terminal. It allows the buyer, manger and, supervisor to make changes and view the products available as well as the price, department, quantity, amount sales, and overhead cost. The manger and supervisor to edit the information to what is needed. The customer can pick an item to buy and how many they want; the app will give them there total. This app is connected to a MySql Database which holds all the information about the products and depending on what your choice it deplays, buys or changes the infomation about that product. It also uses inquirer to promt you with questions as you go though the choices.     
+This is “Bebay”, a practice store front that is ran in the terminal. Bebay allows the buyer, manger, and supervisor to make changes, view the products available, as well as the price, department, quantity, amount sales, and overhead cost. The manger and supervisor have the option to edit the information as needed. Whereas, the customer can pick an item to buy as well as the quantity desired. The app then produces them with their total. This Project is connected to a MySql database. The database displays all the products in the store including all the information about them. In this project I also used cli-table to create a clean table to display the products and their individual information. Also, used is-number and is-string to validate that the product or amount that the user inputs is valid. To conclude the project I also used inquirer in the app to prompt the user with questions directing them to the store.     
+     
 
 
 ## Getting Started
