@@ -18,12 +18,13 @@ const connection = mysql.createConnection({
 	database: process.env.DB_DATABASE
 });
 
-connection.connect(function(err){
+connection.connect((err) => {
 	if (err) throw err; 
 	console.log("connected as id " + connection.threadId);
 	action();
 });
-function action(){
+
+const action = () => {
 	inquirer
 	  	.prompt([
 		{
@@ -36,7 +37,7 @@ function action(){
 		    "exit"
 		    ]
 		},
-		]).then(function(answer){
+		]).then((answer) => {
 		    switch (answer.action) {
 				case "View Products Sales by Department":
 			    ViewProducts();
@@ -52,9 +53,10 @@ function action(){
       		}
 		});
 }
-function ViewProducts(){
+
+const ViewProducts = () => {
 	var query = "select department_name, over_head_costs, product_sales from products2 join departments on products2.department = departments.department_name group by department_name"; 
-	connection.query(query , function(err, res) {
+	connection.query(query , (err, res) => {
 	var table = new Table({
 		head: ["Department Name", "Overhead Costs", "Product Sales", "Total Profit"],
 		colWidths: [20, 20, 20, 20],
@@ -70,14 +72,14 @@ function ViewProducts(){
 			action();
 	});
 }
-function Create(){
+const Create = () => {
 		  	inquirer
 	  		.prompt([
 		  	{
 		      name: "department",
 		      type: "input",
 		      message: "What department do you Want to add?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isString(val)){
 						return true;
 					}else{
@@ -89,7 +91,7 @@ function Create(){
 		      name: "over_head_costs",
 		      type: "input",
 		      message: "What is the over head costs?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isNumber(val)){
 						return true;
 					}else{
@@ -97,19 +99,17 @@ function Create(){
 					}
 				}		      
 		    },
-			]).then(function(answer){
+			]).then((answer) => {
 	    var query = connection.query(
 	    "INSERT INTO departments SET ?",
 	    {
 	      department_name: answer.department,
 	      over_head_costs: answer.over_head_costs,
 	    },
-		    function(err, res) {
-	   	      console.log(" product Added!\n");
-	   	      action();
+			(err, res)=> {
+	   		console.log(" product Added!\n");
+	   	    action();
 		    });
 		});
 }
-function Exit(){
-	connection.end();
-}
+const Exit = () => {connection.end();};

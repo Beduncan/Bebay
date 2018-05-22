@@ -62,7 +62,7 @@ function doWhat(){
 			});
 };
 //shows table 
-function viewAll(){
+const viewAll = () => {
 	var query = "select id, product, price, stock from products2"
 	connection.query(query, (err, res) =>{
 		if (err) throw err;
@@ -72,7 +72,7 @@ function viewAll(){
 	});
 };
 //shows all iteams with a stock lower then 5
-function viewLow(){
+const viewLow = () => {
 	var query = "SELECT product, stock FROM products2 WHERE stock BETWEEN ? AND ?";
 	connection.query(query, [0, 5], (err, res) => {
 		if(err) throw err;
@@ -81,7 +81,7 @@ function viewLow(){
 	});
 };
 // add to inventory
-function addI(){
+const addI = () => {
 	//promting user
 	  	inquirer
 	  	.prompt([
@@ -137,7 +137,7 @@ function addI(){
 		});     
 }	
 //adds a new product to table 
-function addP(){
+const addP = () => {
 	  	inquirer
 	  		.prompt([
 		  	{
