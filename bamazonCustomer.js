@@ -1,5 +1,8 @@
 const mysql = require("mysql");
 const inquirer = require('inquirer');
+require("dotenv").config();
+
+//gettting connection
 const connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -8,8 +11,8 @@ const connection = mysql.createConnection({
 
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE
-
-connection.connect(function(err){
+});
+connection.connect((err) => {
 	if (err) throw err; 
 	console.log("connected as id " + connection.threadId);
 	readItems();
@@ -17,7 +20,7 @@ connection.connect(function(err){
 //shows items to customer
 function readItems() {
 	var query = "select id, product, price from products2"
-	connection.query(query, function(err, res)
+	connection.query(query, (err, res) =>
 	{
 		if (err) throw err;
 		console.log(res);
@@ -27,7 +30,7 @@ function readItems() {
 };
 // starts prompt takes answers and proesses how much is bought by the customer removes that from table 
 function askQ(){	
-	setTimeout(function () {
+	setTimeout(() => {
 		inquirer
 	  		.prompt([
 		  	{
@@ -40,8 +43,8 @@ function askQ(){
 		      message: "how many units of this item would you like?",
 		      name: "amount"
 		    },
-			]).then(function(answer){
-	      		connection.query("select * from products2 where ?", { id:answer.id },  function(err, res) {
+			]).then((answer) => {
+	      		connection.query("select * from products2 where ?", { id:answer.id },  (err, res) => {
 	      			if(answer.amount > res[0].stock){
 	      				console.log('Insufficient quantity!');
 	      				connection.end();
@@ -58,16 +61,17 @@ function askQ(){
 							 id: answer.id
 							}
 						],
-						function(err, res) {
+						(err, res) => {
 							var query = "select price from products2 where ?"
-								connection.query(query,{id:answer.id}, function(err, res)	{
+								connection.query(query,{id:answer.id}, (err, res) =>{
 								if (err) throw err;
 								total = res[0].price * answer.amount;
 								console.log("your total is... " + total);
 							});
 							 var query = "select product_sales from products2 where ?"
-							 	connection.query(query, {id:answer.id}, function(err, res){
-							 		sales = res[0].product_sales
+							 	connection.query(query, {id:answer.id},(err, res) => {
+							 		if(err) throw err;
+							 		sales = res[0].product_sales;
 									 	connection.query("UPDATE products2 set ? where ?", 
 										[ 	
 										 	{
@@ -77,9 +81,7 @@ function askQ(){
 										 		id: answer.id
 										 	}
 										]),
-										function(err, res){
-											if (err) throw err;
-										};
+										(err, res) => {if (err) throw err};
 										ending();
 							 });
 						});
@@ -88,7 +90,7 @@ function askQ(){
       		});		
 	}, 500);	 
 };
-function ending(){
+const ending = () => {
 	inquirer
 		.prompt([		    
 		  	{
@@ -100,7 +102,7 @@ function ending(){
 		        "Exit"
 		      ]
 		    },
-			]).then(function(answer){
+			]).then((answer) => {
 			    switch (answer.whatDo) {
 					case "Buy More":
 				    askQ();
@@ -112,7 +114,5 @@ function ending(){
 			    };
 			});    	
 }  
-function Exit(){
-	connection.end();
-} 				
+const Exit = () => connection.end(); 	 			
 

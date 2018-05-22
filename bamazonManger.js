@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
 	database: process.env.DB_DATABASE
 });
 
-connection.connect(function(err){
+connection.connect((err) => {
 	if (err) throw err; 
 	console.log("connected as id " + connection.threadId);
 	doWhat();
@@ -37,7 +37,7 @@ function doWhat(){
 		        "Exit"
 		      ]
 		    },
-			]).then(function(answer){
+			]).then((answer) => {
 				switch (answer.whatDo) {
 					case "View Products for Sale":
 				    viewAll();
@@ -64,8 +64,7 @@ function doWhat(){
 //shows table 
 function viewAll(){
 	var query = "select id, product, price, stock from products2"
-	connection.query(query, function(err, res)
-	{
+	connection.query(query, (err, res) =>{
 		if (err) throw err;
 		console.log(res);
 		console.log("-----------------------");
@@ -75,7 +74,7 @@ function viewAll(){
 //shows all iteams with a stock lower then 5
 function viewLow(){
 	var query = "SELECT product, stock FROM products2 WHERE stock BETWEEN ? AND ?";
-	connection.query(query, [0, 5], function(err, res){
+	connection.query(query, [0, 5], (err, res) => {
 		if(err) throw err;
 		console.log(res);
 		doWhat();
@@ -90,7 +89,7 @@ function addI(){
 		      name: "id",
 		      type: "input",
 		      message: "Which item number do you wanna update?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isNumber(val)){
 						return true;
 					}else{
@@ -102,7 +101,7 @@ function addI(){
 		    	name: "amount",
 		    	type: "input",
 		    	message:"How much was added?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isNumber(val)){
 						return true;
 					}else{
@@ -110,7 +109,7 @@ function addI(){
 					}
 				}
 		    }
-		]).then(function(answer){
+		]).then((answer) =>{
 			// getting stocks from product wanted 
 			 query = "select stock from products2 where ?"
 			connection.query(query, { id:answer.id }, function(err, res)
@@ -130,7 +129,7 @@ function addI(){
 			        id: answer.id
 			      }
 			    ],
-			    function(error, responce) {
+			    (error, responce) => {
 			      console.log("products updated!\n");
 			      doWhat();
 			    });
@@ -145,7 +144,7 @@ function addP(){
 		      name: "item",
 		      type: "input",
 		      message: "What do you Want to add?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isString(val)){
 						return true;
 					}else{
@@ -157,7 +156,7 @@ function addP(){
 		      name: "department",
 		      type: "input",
 		      message: "Which department does it belong too?",
-		    	validate: function(val){
+		    	validate: (val) => {
 					if(isString(val)){
 						return true;
 					}else{
@@ -169,7 +168,7 @@ function addP(){
 		    	name:"price",
 		    	type:"input",
 		    	message:"What is the price of the product?",			
-		    	validate: function(val){
+		    	validate: (val) =>{
 					if(isNumber(val)){
 						return true;
 					}else{
@@ -181,7 +180,7 @@ function addP(){
 		    	name:"stock",
 		    	type:"input",
 		    	message:"How many are you inserting?",
-		    	validate: function(val){
+		    	validate:  (val) => {
 					if(isNumber(val)){
 						return true;
 					}else{
@@ -189,21 +188,20 @@ function addP(){
 					}
 				}		    	
 		    },
-			]).then(function(answer){
+			]).then((answer) => {
 	    var query = connection.query(
 	    "INSERT INTO products2 SET ?",
 	    {
 	      product: answer.item,
 	      department: answer.department,
 	      price: answer.price,
-	      Stock: answer.stock
+	      Stock: answer.stock,
+	      product_sales: 0
 	    },
-		    function(err, res) {
+		    (err, res) => {
 	   	      console.log(" product Added!\n");
 	   	      doWhat();
 		    });
 		});
 };
-function Exit(){
-	connection.end();
-} 			
+const Exit = () => { connection.end(); } 			
